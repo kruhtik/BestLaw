@@ -1,12 +1,14 @@
 
 import React, { useState } from 'react';
-import { View, Text, Linking, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Linking, StyleSheet, ScrollView, Image } from 'react-native';
 import AuthCard from '../components/AuthCard';
 import PhoneField from '../components/PhoneField';
 import TextField from '../components/TextField';
 import Checkbox from '../components/Checkbox';
 import Button from '../components/Button';
 import theme from '../theme/Theme';
+// static image
+const LogoImg = require('../../assets/kruthik.png');
 
 export default function SignupScreen({ navigation }: any) {
   const [code, setCode] = useState('+91');
@@ -32,9 +34,15 @@ export default function SignupScreen({ navigation }: any) {
       keyboardShouldPersistTaps="handled"
     >
       <AuthCard>
-        <Text style={styles.title}>Sign up</Text>
-        <Text style={styles.subtitle}>Sign up with Email & Phone Number</Text>
+        <View style={{ alignItems: 'center', marginBottom: 6 }}>
+          <View style={styles.logoCircle}>
+            <Image source={LogoImg} style={styles.logo} resizeMode="contain" />
+          </View>
+          <Text style={[styles.title, { textAlign: 'center' }]}>BestLaw</Text>
+          <Text style={[styles.subtitle, { textAlign: 'center' }]}>Your intelligent legal research companion</Text>
+        </View>
 
+        <Text style={styles.label}>Mobile number</Text>
         <PhoneField
           code={code}
           onCodeChange={setCode}
@@ -44,6 +52,7 @@ export default function SignupScreen({ navigation }: any) {
           error={submitted && !phone ? 'Mobile number is required' : undefined}
         />
 
+        <Text style={styles.label}>Email</Text>
         <TextField
           placeholder="Email"
           value={email}
@@ -53,6 +62,7 @@ export default function SignupScreen({ navigation }: any) {
           error={submitted && !email ? 'Email is required' : undefined}
         />
 
+        <Text style={styles.label}>Password</Text>
         <TextField
           placeholder="Password"
           value={pwd}
@@ -85,8 +95,11 @@ export default function SignupScreen({ navigation }: any) {
         {/* 🔓 allow tapping even when empty; we handle validation in onSignUp */}
         <Button title="Sign Up" onPress={onSignUp} style={{ marginTop: 4 }} />
 
-        <Text style={styles.helper} onPress={() => navigation.navigate('Login')}>
-          Already have an account?
+        <Text style={styles.helper}>
+          Already have an account?{' '}
+          <Text style={{ color: theme.colors.primary }} onPress={() => navigation.navigate('Login')}>
+            Sign in
+          </Text>
         </Text>
       </AuthCard>
     </ScrollView>
@@ -95,8 +108,11 @@ export default function SignupScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   wrap: { flexGrow: 1, backgroundColor: theme.colors.bg, padding: 20, justifyContent: 'center' },
+  logoCircle: { width: 72, height: 72, borderRadius: 36, backgroundColor: theme.colors.text, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
+  logo: { width: 36, height: 36 },
   title: { color: theme.colors.text, fontSize: 28, fontWeight: '700', marginBottom: 6 },
   subtitle: { color: theme.colors.muted, marginBottom: 8 },
+  label: { color: theme.colors.text, fontWeight: '600', marginBottom: 6, marginTop: 6 },
   helper: { marginTop: 10, color: theme.colors.muted, textAlign: 'center' },
   err: { color: theme.colors.danger, marginTop: 6, fontSize: 12 },
 });
