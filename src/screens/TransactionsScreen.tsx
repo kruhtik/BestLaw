@@ -38,7 +38,19 @@ export default function TransactionsScreen() {
           </Pressable>
           <Pressable
             style={styles.brandPill}
-            onPress={() => navigation.navigate('Home' as never)}
+            onPress={() => {
+              // Try navigating via parent navigators (e.g., DrawerRoot), then fallback to current
+              // @ts-ignore dynamic at runtime
+              const parentByKey = (navigation as any).getParent?.('DrawerRoot');
+              // @ts-ignore dynamic at runtime
+              const parent = parentByKey ?? (navigation as any).getParent?.();
+              if (parent && typeof parent.navigate === 'function') {
+                parent.navigate('Home');
+              } else {
+                // @ts-ignore allow untyped route name
+                navigation.navigate('Home');
+              }
+            }}
             accessibilityRole="button"
             accessibilityLabel="Go to Home"
           >

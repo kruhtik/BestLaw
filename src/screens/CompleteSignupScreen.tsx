@@ -27,7 +27,7 @@ export default function CompleteSignupScreen({ navigation }: any) {
     setSubmitted(true);
     const ok = first.trim() && last.trim() && firm.trim() && state;
     if (!ok) return; // just reveal errors
-    navigation.replace('Home');
+    navigation.replace('Login');
   };
 
   return (
@@ -104,7 +104,12 @@ export default function CompleteSignupScreen({ navigation }: any) {
         </Modal>
 
         {/* Let the press happen; we handle validation with `submitted` */}
-        <Button title="Complete Sign Up" variant="pink" onPress={onSubmit} />
+        <Button
+          title="Complete Sign Up"
+          variant="primary"
+          onPress={onSubmit}
+          style={{ backgroundColor: '#6C4CEB', borderColor: 'transparent' }}
+        />
 
         <Text style={styles.helper} onPress={() => navigation.navigate('Login')}>
           Already have an account?
