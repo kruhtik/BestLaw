@@ -2,6 +2,7 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { SvgUri } from 'react-native-svg';
 import { useTheme } from '../theme/ThemeProvider';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 import theme from '../theme/Theme';
@@ -35,8 +36,20 @@ export default function TransactionsScreen() {
           >
             <MaterialIcons name="menu" size={18} color={colors.text} />
           </Pressable>
-          <Text style={styles.headerTitle}>Transactions</Text>
+          <Pressable
+            style={styles.brandPill}
+            onPress={() => navigation.navigate('Home' as never)}
+            accessibilityRole="button"
+            accessibilityLabel="Go to Home"
+          >
+            <SvgUri
+              width={88}
+              height={24}
+              uri="https://staticservedev.blob.core.windows.net/bestlaw/bestlaw/316db6bf-7bfa-4f42-a580-e4e9dff072c2.svg"
+            />
+          </Pressable>
         </View>
+        <Text style={styles.headerTitle}>Transactions</Text>
         <Text style={styles.headerSub}>Manage your Credit Usage and Subscription Details</Text>
 
         {/* Tabs */}
@@ -146,12 +159,13 @@ const getStyles = (colors: typeof theme.colors) =>
     container: { flex: 1, backgroundColor: colors.bg },
     scroll: { padding: 16, paddingBottom: 24 },
 
-    header: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
+    header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 },
     menuBtn: { width: 36, height: 36, borderRadius: 10, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center', marginRight: 8, ...theme.shadow.card },
-    headerTitle: { color: colors.text, fontWeight: '800', fontSize: 20 },
+    headerTitle: { color: colors.text, fontWeight: '800', fontSize: 20, marginBottom: 4 },
+    brandPill: { backgroundColor: colors.card, borderRadius: theme.radius.full, paddingHorizontal: 14, paddingVertical: 6, ...theme.shadow.card, borderWidth: 1, borderColor: colors.border },
     headerSub: { color: colors.textSecondary, marginTop: -6, marginBottom: 10 },
 
-    tabs: { flexDirection: 'row', backgroundColor: colors.card, borderRadius: 12, borderWidth: 1, borderColor: colors.border, padding: 4, ...theme.shadow.card, marginBottom: 12 },
+    tabs: { flexDirection: 'row', backgroundColor: colors.card, borderRadius: 12, borderWidth: 1, borderColor: colors.border, padding: 4, ...theme.shadow.card, marginBottom: 28 },
     tabBtn: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, paddingHorizontal: 10, borderRadius: 10, gap: 6, flex: 1, justifyContent: 'center' },
     tabActive: { borderBottomWidth: 2, borderBottomColor: colors.primaryDark },
     tabText: { color: colors.textSecondary, fontWeight: '600' },

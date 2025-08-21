@@ -1,130 +1,274 @@
 // src/screens/HomeScreen.tsx
-import React from 'react';
+import React, { ComponentProps } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
-import { DrawerActions } from '@react-navigation/native';
+import { SvgUri } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTheme } from '../theme/ThemeProvider';
-import theme from '../theme/Theme';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+
+type IconName = ComponentProps<typeof MaterialCommunityIcons>['name'];
+
+interface QuickAction {
+  key: string;
+  title: string;
+  subtitle: string;
+  icon: IconName;
+  color: string;
+  screen: string;
+}
+
+interface RecentActivityItem {
+  key: string;
+  title: string;
+  time: string;
+  status: 'completed' | 'in-progress';
+  icon: IconName;
+  iconColor: string;
+}
+
+const quickActions: QuickAction[] = [
+  {
+    key: 'research',
+    title: 'Start Research',
+    subtitle: 'Search legal judgments',
+    icon: 'magnify',
+    color: '#4A90E2',
+    screen: 'JudgmentResearch',
+  },
+  {
+    key: 'chat',
+    title: 'AI Chat',
+    subtitle: 'Get instant legal insights',
+    icon: 'chat-processing-outline',
+    color: '#50E3C2',
+    screen: 'ChatWithDB',
+  },
+  {
+    key: 'draft',
+    title: 'Draft Document',
+    subtitle: 'Create legal documents',
+    icon: 'file-document-outline',
+    color: '#B86BFF',
+    screen: 'Drafting',
+  },
+  {
+    key: 'commentary',
+    title: 'Commentary',
+    subtitle: 'Read expert analysis',
+    icon: 'star-outline',
+    color: '#F8A53A',
+    screen: 'Commentary',
+  },
+];
+
+const recentActivity: RecentActivityItem[] = [
+  {
+    key: '1',
+    title: 'Constitutional Law - Articl...',
+    time: '2 hours ago',
+    status: 'completed',
+    icon: 'magnify',
+    iconColor: '#D0021B',
+  },
+  {
+    key: '2',
+    title: 'Contract Agreement Draft',
+    time: '5 hours ago',
+    status: 'in-progress',
+    icon: 'file-document-outline',
+    iconColor: '#D0021B',
+  },
+];
 
 export default function HomeScreen({ navigation, route }: any) {
-  const { colors } = useTheme();
-  const styles = React.useMemo(() => getStyles(colors), [colors]);
-  const userName: string = route?.params?.userName || 'User';
-  const features = [
-    { key: 'chat', label: 'Chat With DB', screen: 'ChatWithDB' },
-    { key: 'commentary', label: 'Commentary', screen: 'Commentary' },
-    { key: 'drafting', label: 'Drafting', screen: 'Drafting' },
-    { key: 'jr', label: 'Judgment Research', screen: 'JudgmentResearch' },
-  ];
+  const styles = React.useMemo(() => getStyles(), []);
+  const userName: string = route?.params?.userName || 'John';
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Pressable
-            style={styles.menuBtn}
-            onPress={() => navigation.getParent()?.dispatch(DrawerActions.openDrawer())}
-          >
-            <Text style={styles.menuIcon}>≡</Text>
-          </Pressable>
-        </View>
-        <View style={styles.headerCenter}>
-          <View style={styles.brandPill}>
-            <Text style={styles.brandText}>BestLaw</Text>
+    <View style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.header}>
+          <SafeAreaView edges={['top']}>
+            <View style={styles.headerTopRow}>
+              <View style={styles.headerLeftSpacer} />
+              <Pressable
+                style={styles.headerLogoContainer}
+                onPress={() => navigation.navigate('Home')}
+                accessibilityRole="button"
+                accessibilityLabel="Go to Home"
+              >
+                <SvgUri
+                  uri="https://staticservedev.blob.core.windows.net/bestlaw/bestlaw/316db6bf-7bfa-4f42-a580-e4e9dff072c2.svg"
+                  width={98}
+                  height={30}
+                />
+              </Pressable>
+            </View>
             <Text style={styles.welcomeText}>Welcome back, {userName}</Text>
+            <Text style={styles.subWelcomeText}>Ready to research today?</Text>
+          </SafeAreaView>
+        </View>
+
+        <View style={styles.body}>
+          {/* Quick Actions */}
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>Quick Actions</Text>
+            <View style={styles.quickActionsGrid}>
+              {quickActions.map((item) => (
+                <Pressable
+                  key={item.key}
+                  style={styles.quickActionCard}
+                  onPress={() => navigation.navigate('FeaturesTabs', { screen: item.screen })}
+                >
+                  <View style={[styles.quickActionIconContainer, { backgroundColor: `${item.color}20` }]}>
+                    <MaterialCommunityIcons name={item.icon} size={24} color={item.color} />
+                  </View>
+                  <Text style={styles.quickActionTitle}>{item.title}</Text>
+                  <Text style={styles.quickActionSubtitle}>{item.subtitle}</Text>
+                </Pressable>
+              ))}
+            </View>
+          </View>
+
+          {/* Stats */}
+          <View style={styles.statsRow}>
+            <View style={styles.statCard}>
+              <MaterialCommunityIcons name="magnify" size={20} color="#A5B4CB" />
+              <Text style={styles.statNumber}>24</Text>
+              <Text style={styles.statLabel}>Researches</Text>
+            </View>
+            <View style={styles.statCard}>
+              <MaterialCommunityIcons name="file-document-outline" size={20} color="#A5B4CB" />
+              <Text style={styles.statNumber}>12</Text>
+              <Text style={styles.statLabel}>Documents</Text>
+            </View>
+          </View>
+
+          {/* Recent Activity */}
+          <View style={styles.sectionContainer}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Recent Activity</Text>
+              <Pressable>
+                <Text style={styles.viewAllText}>View all →</Text>
+              </Pressable>
+            </View>
+            <View style={styles.activityList}>
+              {recentActivity.map((item) => (
+                <View key={item.key} style={styles.activityItem}>
+                  <View style={[styles.activityIconContainer, { backgroundColor: `${item.iconColor}20` }]}>
+                    <MaterialCommunityIcons name={item.icon} size={20} color={item.iconColor} />
+                  </View>
+                  <View style={styles.activityTextContainer}>
+                    <Text style={styles.activityTitle}>{item.title}</Text>
+                    <Text style={styles.activityTime}>{item.time}</Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.statusPill,
+                      item.status === 'completed' ? styles.completedPill : styles.inProgressPill,
+                    ]}
+                  >
+                    <Text style={item.status === 'completed' ? styles.statusTextLight : styles.statusTextDark}>
+                      {item.status}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+            </View>
           </View>
         </View>
-      
-      </View>
-
-      {/* Body */}
-      <ScrollView contentContainerStyle={styles.body} showsVerticalScrollIndicator={false}>
-       
-        {features.map((f) => (
-          <Pressable
-            key={f.key}
-            style={({ pressed }) => [styles.cardBtn, pressed && { opacity: 0.85 }]}
-            onPress={() => navigation.navigate('FeaturesTabs', { screen: f.screen })}
-            testID={`home-btn-${f.key}`}
-          >
-            <Text style={styles.cardText}>{f.label}</Text>
-          </Pressable>
-        ))}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
-const getStyles = (colors: typeof theme.colors) =>
+const getStyles = () =>
   StyleSheet.create({
-    container: { flex: 1, backgroundColor: colors.bg },
+    container: { flex: 1, backgroundColor: '#FFFFFF' },
     header: {
+      backgroundColor: '#6C4CEB',
+      paddingHorizontal: 20,
+      paddingBottom: 20,
+      borderBottomLeftRadius: 24,
+      borderBottomRightRadius: 24,
+    },
+    headerTopRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
+    headerLeftSpacer: { width: 96, height: 28 },
+    headerLogoContainer: { flexDirection: 'row', alignItems: 'center', marginTop: 15 },
+    headerTitle: { fontSize: 22, fontWeight: 'bold', color: '#FFFFFF', marginLeft: 8 },
+    proPill: { backgroundColor: '#FFFFFF', borderRadius: 12, paddingHorizontal: 12, paddingVertical: 4 },
+    proText: { color: '#6C4CEB', fontWeight: 'bold', fontSize: 12 },
+    welcomeText: { fontSize: 18, color: '#FFFFFF', fontWeight: '600' },
+    subWelcomeText: { fontSize: 14, color: '#FFFFFF', opacity: 0.8 },
+    body: { padding: 20 },
+    sectionContainer: { marginBottom: 24 },
+    sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+    sectionTitle: { fontSize: 18, fontWeight: 'bold', color: '#111827', marginBottom: 16 },
+    viewAllText: { fontSize: 14, color: '#6C4CEB' },
+    quickActionsGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
+    quickActionCard: {
+      width: '48%',
+      backgroundColor: '#FFFFFF',
+      borderRadius: 16,
+      padding: 16,
+      marginBottom: 16,
+      alignItems: 'flex-start',
+      borderWidth: 1,
+      borderColor: '#E5E7EB',
+      shadowColor: 'rgba(17, 24, 39, 0.08)',
+      shadowOpacity: 1,
+      shadowOffset: { width: 0, height: 1 },
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    quickActionIconContainer: { borderRadius: 12, padding: 8, marginBottom: 16 },
+    quickActionTitle: { fontSize: 16, fontWeight: 'bold', color: '#111827', marginBottom: 4 },
+    quickActionSubtitle: { fontSize: 12, color: '#6B7280' },
+    statsRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 24 },
+    statCard: {
+      width: '48%',
+      backgroundColor: '#FFFFFF',
+      borderRadius: 16,
+      padding: 16,
       flexDirection: 'row',
       alignItems: 'center',
-      paddingHorizontal: 16,
-      paddingTop: 8,
-      paddingBottom: 4,
-    },
-    headerLeft: { flex: 1, alignItems: 'flex-start' },
-    headerCenter: { flex: 1, alignItems: 'center' },
-    headerRight: { flex: 1, alignItems: 'flex-end' },
-    menuBtn: {
-      width: 36,
-      height: 36,
-      borderRadius: 8,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: colors.card,
+      flexWrap: 'wrap',
       borderWidth: 1,
-      borderColor: colors.border,
-      ...theme.shadow.card,
+      borderColor: '#E5E7EB',
+      shadowColor: 'rgba(17, 24, 39, 0.08)',
+      shadowOpacity: 1,
+      shadowOffset: { width: 0, height: 1 },
+      shadowRadius: 4,
+      elevation: 2,
     },
-    menuIcon: { fontSize: 18, color: colors.text },
-    brandPill: {
-      backgroundColor: colors.card,
-      borderRadius: theme.radius.full,
-      paddingHorizontal: 14,
-      paddingVertical: 6,
-      ...theme.shadow.card,
-    },
-    brandText: { color: colors.text, fontSize: 16, fontWeight: '700' },
-    welcomeText: { color: colors.textSecondary, fontSize: 14, marginTop: 2 },
-    avatar: {
-      width: 36,
-      height: 36,
-      borderRadius: 18,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: colors.card,
+    statNumber: { fontSize: 20, fontWeight: 'bold', color: '#111827', marginHorizontal: 8 },
+    statLabel: { fontSize: 14, color: '#6B7280' },
+    activityList: {
+      backgroundColor: '#FFFFFF',
+      borderRadius: 16,
+      padding: 8,
       borderWidth: 1,
-      borderColor: colors.border,
-      ...theme.shadow.card,
+      borderColor: '#E5E7EB',
+      shadowColor: 'rgba(17, 24, 39, 0.08)',
+      shadowOpacity: 1,
+      shadowOffset: { width: 0, height: 1 },
+      shadowRadius: 4,
+      elevation: 2,
     },
-    body: {
-      flexGrow: 1,
-      paddingHorizontal: 20,
-      paddingBottom: 40,
+    activityItem: {
+      flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'center',
+      paddingVertical: 12,
+      paddingHorizontal: 8,
+      borderBottomWidth: 1,
+      borderBottomColor: '#F3F4F6',
     },
-    sectionTitle: {
-      color: colors.textSecondary,
-      marginBottom: 16,
-      fontWeight: '600',
-      alignSelf: 'center',
-    },
-    cardBtn: {
-      backgroundColor: colors.card,
-      borderRadius: theme.radius.lg,
-      paddingVertical: 18,
-      alignItems: 'center',
-      marginBottom: 16,
-      width: '80%',
-      maxWidth: 360,
-      borderWidth: 1,
-      borderColor: colors.border,
-      ...theme.shadow.card,
-    },
-    cardText: { color: colors.text, fontSize: 18, fontWeight: '700' },
+    activityIconContainer: { borderRadius: 20, width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
+    activityTextContainer: { flex: 1, marginLeft: 12 },
+    activityTitle: { fontSize: 15, fontWeight: '600', color: '#111827' },
+    activityTime: { fontSize: 12, color: '#6B7280', marginTop: 2 },
+    statusPill: { borderRadius: 12, paddingHorizontal: 10, paddingVertical: 4 },
+    completedPill: { backgroundColor: '#6C4CEB' },
+    inProgressPill: { backgroundColor: '#E5E7EB' },
+    statusTextLight: { color: '#FFFFFF', fontSize: 11, fontWeight: 'bold', textTransform: 'capitalize' },
+    statusTextDark: { color: '#374151', fontSize: 11, fontWeight: 'bold', textTransform: 'capitalize' },
   });

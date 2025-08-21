@@ -1,10 +1,12 @@
 // src/screens/CompleteSignupScreen.tsx
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, Pressable, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Modal, Pressable, FlatList, Image } from 'react-native';
 import AuthCard from '../components/AuthCard';
 import TextField from '../components/TextField';
 import Button from '../components/Button';
 import theme from '../theme/Theme';
+// Use same logo as Login/Signup
+const LogoImg = require('../../assets/logo.png');
 
 const STATES = [
   'Andhra Pradesh','Bihar','Delhi','Karnataka','Kerala','Maharashtra','Rajasthan',
@@ -31,8 +33,13 @@ export default function CompleteSignupScreen({ navigation }: any) {
   return (
     <View style={styles.wrap}>
       <AuthCard>
-        <Text style={styles.title}>Sign up</Text>
-        <Text style={styles.subtitle}>Enter credentials to continue</Text>
+        <View style={{ alignItems: 'center', marginBottom: 6 }}>
+          <View style={styles.logoCircle}>
+            <Image source={LogoImg} style={styles.logo} resizeMode="contain" />
+          </View>
+          <Text style={[styles.title, { textAlign: 'center' }]}>BestLaw</Text>
+          <Text style={[styles.subtitle, { textAlign: 'center' }]}>Your intelligent legal research companion</Text>
+        </View>
 
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <View style={{ flex: 1 }}>
@@ -109,6 +116,8 @@ export default function CompleteSignupScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   wrap: { flex: 1, backgroundColor: theme.colors.bg, padding: 20, justifyContent: 'center' },
+  logoCircle: { width: 72, height: 72, borderRadius: 36, backgroundColor: theme.colors.card, alignItems: 'center', justifyContent: 'center', marginBottom: 8, borderWidth: 1, borderColor: theme.colors.border },
+  logo: { width: 68, height: 68 },
   title: { color: theme.colors.text, fontSize: 26, fontWeight: '700' },
   subtitle: { color: theme.colors.muted, marginTop: 4, marginBottom: 8 },
   select: {
