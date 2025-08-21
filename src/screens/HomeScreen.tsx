@@ -1,7 +1,7 @@
 // src/screens/HomeScreen.tsx
 import React, { ComponentProps } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
-import { SvgUri } from 'react-native-svg';
+import Svg, { SvgUri, Defs, LinearGradient as SvgLinearGradient, Stop, Rect } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
@@ -63,7 +63,7 @@ const quickActions: QuickAction[] = [
 const recentActivity: RecentActivityItem[] = [
   {
     key: '1',
-    title: 'Constitutional Law - Articl...',
+    title: 'Constitutional Law – Article 21',
     time: '2 hours ago',
     status: 'completed',
     icon: 'magnify',
@@ -87,9 +87,24 @@ export default function HomeScreen({ navigation, route }: any) {
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
+          {/* Gradient background */}
+          <Svg
+            style={styles.headerGradient}
+            width="100%"
+            height="100%"
+            preserveAspectRatio="none"
+            viewBox="0 0 100 100"
+          >
+            <Defs>
+              <SvgLinearGradient id="bestlawHeaderGrad" x1="0" y1="0" x2="1" y2="1">
+                <Stop offset="0" stopColor="#7B5CFF" stopOpacity="1" />
+                <Stop offset="1" stopColor="#6C4CEB" stopOpacity="1" />
+              </SvgLinearGradient>
+            </Defs>
+            <Rect x="0" y="0" width="100" height="100" fill="url(#bestlawHeaderGrad)" />
+          </Svg>
           <SafeAreaView edges={['top']}>
             <View style={styles.headerTopRow}>
-              <View style={styles.headerLeftSpacer} />
               <Pressable
                 style={styles.headerLogoContainer}
                 onPress={() => navigation.navigate('Home')}
@@ -101,6 +116,15 @@ export default function HomeScreen({ navigation, route }: any) {
                   width={98}
                   height={30}
                 />
+              </Pressable>
+              <Pressable
+                onPress={() => navigation.navigate('Settings')}
+                accessibilityRole="button"
+                accessibilityLabel="Open profile/settings"
+              >
+                <View style={styles.avatarCircle}>
+                  <Text style={styles.avatarInitial}>{userName?.[0] ?? 'U'}</Text>
+                </View>
               </Pressable>
             </View>
             <Text style={styles.welcomeText}>Welcome back, {userName}</Text>
@@ -116,8 +140,9 @@ export default function HomeScreen({ navigation, route }: any) {
               {quickActions.map((item) => (
                 <Pressable
                   key={item.key}
-                  style={styles.quickActionCard}
+                  style={({ pressed }) => [styles.quickActionCard, pressed && styles.cardPressed]}
                   onPress={() => navigation.navigate('FeaturesTabs', { screen: item.screen })}
+                  android_ripple={{ color: '#00000010' }}
                 >
                   <View style={[styles.quickActionIconContainer, { backgroundColor: `${item.color}20` }]}>
                     <MaterialCommunityIcons name={item.icon} size={24} color={item.color} />
@@ -158,7 +183,7 @@ export default function HomeScreen({ navigation, route }: any) {
                     <MaterialCommunityIcons name={item.icon} size={20} color={item.iconColor} />
                   </View>
                   <View style={styles.activityTextContainer}>
-                    <Text style={styles.activityTitle}>{item.title}</Text>
+                    <Text style={styles.activityTitle} numberOfLines={2}>{item.title}</Text>
                     <Text style={styles.activityTime}>{item.time}</Text>
                   </View>
                   <View
@@ -168,7 +193,7 @@ export default function HomeScreen({ navigation, route }: any) {
                     ]}
                   >
                     <Text style={item.status === 'completed' ? styles.statusTextLight : styles.statusTextDark}>
-                      {item.status}
+                      {item.status === 'completed' ? 'Completed' : 'In Progress'}
                     </Text>
                   </View>
                 </View>
@@ -190,10 +215,14 @@ const getStyles = () =>
       paddingBottom: 20,
       borderBottomLeftRadius: 24,
       borderBottomRightRadius: 24,
+      overflow: 'hidden',
     },
+    headerGradient: { ...StyleSheet.absoluteFillObject },
     headerTopRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
     headerLeftSpacer: { width: 96, height: 28 },
-    headerLogoContainer: { flexDirection: 'row', alignItems: 'center', marginTop: 15 },
+    headerLogoContainer: { flexDirection: 'row', alignItems: 'center', marginTop: 20 },
+    avatarCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#E5E7EB', marginTop: 20 },
+    avatarInitial: { color: '#6C4CEB', fontWeight: '800' },
     headerTitle: { fontSize: 22, fontWeight: 'bold', color: '#FFFFFF', marginLeft: 8 },
     proPill: { backgroundColor: '#FFFFFF', borderRadius: 12, paddingHorizontal: 12, paddingVertical: 4 },
     proText: { color: '#6C4CEB', fontWeight: 'bold', fontSize: 12 },
@@ -211,6 +240,7 @@ const getStyles = () =>
       borderRadius: 16,
       padding: 16,
       marginBottom: 16,
+      minHeight: 120,
       alignItems: 'flex-start',
       borderWidth: 1,
       borderColor: '#E5E7EB',
@@ -220,6 +250,7 @@ const getStyles = () =>
       shadowRadius: 4,
       elevation: 2,
     },
+    cardPressed: { opacity: 0.9 },
     quickActionIconContainer: { borderRadius: 12, padding: 8, marginBottom: 16 },
     quickActionTitle: { fontSize: 16, fontWeight: 'bold', color: '#111827', marginBottom: 4 },
     quickActionSubtitle: { fontSize: 12, color: '#6B7280' },
@@ -227,7 +258,7 @@ const getStyles = () =>
     statCard: {
       width: '48%',
       backgroundColor: '#FFFFFF',
-      borderRadius: 16,
+      borderRadius: 999,
       padding: 16,
       flexDirection: 'row',
       alignItems: 'center',
@@ -264,11 +295,11 @@ const getStyles = () =>
     },
     activityIconContainer: { borderRadius: 20, width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
     activityTextContainer: { flex: 1, marginLeft: 12 },
-    activityTitle: { fontSize: 15, fontWeight: '600', color: '#111827' },
+    activityTitle: { fontSize: 15, fontWeight: '600', color: '#111827', lineHeight: 20 },
     activityTime: { fontSize: 12, color: '#6B7280', marginTop: 2 },
     statusPill: { borderRadius: 12, paddingHorizontal: 10, paddingVertical: 4 },
-    completedPill: { backgroundColor: '#6C4CEB' },
-    inProgressPill: { backgroundColor: '#E5E7EB' },
+    completedPill: { backgroundColor: '#22C55E' },
+    inProgressPill: { backgroundColor: '#F59E0B' },
     statusTextLight: { color: '#FFFFFF', fontSize: 11, fontWeight: 'bold', textTransform: 'capitalize' },
     statusTextDark: { color: '#374151', fontSize: 11, fontWeight: 'bold', textTransform: 'capitalize' },
   });
