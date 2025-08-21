@@ -8,7 +8,7 @@ import AuthCard from '../components/AuthCard';
 import OTPInput from '../components/OTPInput';
 import Button from '../components/Button';
 import theme from '../theme/Theme';
-const LogoImg = require('../../assets/kruthik.png');
+const LogoImg = require('../../assets/logo.png');
 
 export default function VerifyOTPScreen({ navigation }: any) {
   const [emailOtp, setEmailOtp] = useState('');
@@ -77,8 +77,8 @@ export default function VerifyOTPScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   wrap: { flexGrow: 1, padding: 20, justifyContent: 'center' },
-  logoCircle: { width: 72, height: 72, borderRadius: 36, backgroundColor: theme.colors.text, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
-  logo: { width: 36, height: 36 },
+  logoCircle: { width: 72, height: 72, borderRadius: 36, backgroundColor: theme.colors.card, alignItems: 'center', justifyContent: 'center', marginBottom: 8, borderWidth: 1, borderColor: theme.colors.border },
+  logo: { width: 68, height: 68 },
   title: { color: theme.colors.text, fontSize: 26, fontWeight: '700' },
   hint: { color: theme.colors.muted, marginTop: 4, marginBottom: 10 },
   section: { color: theme.colors.text, marginTop: 8, marginBottom: 8, fontWeight: '600' },

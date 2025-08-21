@@ -6,7 +6,7 @@ import TextField from '../components/TextField';
 import Button from '../components/Button';
 import theme from '../theme/Theme';
 // Use require for React Native static image to avoid TS typings issues
-const LogoImg = require('../../assets/kruthik.png');
+const LogoImg = require('../../assets/logo.png');
 
 export default function LoginScreen({ navigation }: any) {
   const [id, setId] = useState('');
@@ -83,8 +83,8 @@ export default function LoginScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   wrap: { flex: 1, backgroundColor: theme.colors.bg, padding: 20, justifyContent: 'center' },
-  logoCircle: { width: 72, height: 72, borderRadius: 36, backgroundColor: theme.colors.text, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
-  logo: { width: 36, height: 36 },
+  logoCircle: { width: 72, height: 72, borderRadius: 36, backgroundColor: theme.colors.card, alignItems: 'center', justifyContent: 'center', marginBottom: 8, borderWidth: 1, borderColor: theme.colors.border },
+  logo: { width: 68, height: 68 },
   title: { color: theme.colors.text, fontSize: 26, fontWeight: '700', marginBottom: 0 },
   subtitle: { color: theme.colors.muted, marginBottom: 8 },
   label: { color: theme.colors.text, fontWeight: '600', marginBottom: 6, marginTop: 6 },

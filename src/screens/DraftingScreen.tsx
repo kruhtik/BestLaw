@@ -2,6 +2,7 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { SvgUri } from 'react-native-svg';
 import { DrawerActions } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeProvider';
 import theme from '../theme/Theme';
@@ -18,9 +19,18 @@ export default function DraftingScreen({ navigation }: any) {
         >
           <Text style={styles.menuIcon}>≡</Text>
         </Pressable>
-        <View style={styles.brandPill}>
-          <Text style={styles.brandText}>BestLaw</Text>
-        </View>
+        <Pressable
+          style={styles.brandPill}
+          onPress={() => navigation.navigate('Home')}
+          accessibilityRole="button"
+          accessibilityLabel="Go to Home"
+        >
+          <SvgUri
+            width={88}
+            height={24}
+            uri="https://staticservedev.blob.core.windows.net/bestlaw/bestlaw/316db6bf-7bfa-4f42-a580-e4e9dff072c2.svg"
+          />
+        </Pressable>
        
       </View>
 

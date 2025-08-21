@@ -7,8 +7,8 @@ import TextField from '../components/TextField';
 import Checkbox from '../components/Checkbox';
 import Button from '../components/Button';
 import theme from '../theme/Theme';
-// static image
-const LogoImg = require('../../assets/kruthik.png');
+// Use same logo as Login
+const LogoImg = require('../../assets/logo.png');
 
 export default function SignupScreen({ navigation }: any) {
   const [code, setCode] = useState('+91');
@@ -108,8 +108,8 @@ export default function SignupScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   wrap: { flexGrow: 1, backgroundColor: theme.colors.bg, padding: 20, justifyContent: 'center' },
-  logoCircle: { width: 72, height: 72, borderRadius: 36, backgroundColor: theme.colors.text, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
-  logo: { width: 36, height: 36 },
+  logoCircle: { width: 72, height: 72, borderRadius: 36, backgroundColor: theme.colors.card, alignItems: 'center', justifyContent: 'center', marginBottom: 8, borderWidth: 1, borderColor: theme.colors.border },
+  logo: { width: 68, height: 68 },
   title: { color: theme.colors.text, fontSize: 28, fontWeight: '700', marginBottom: 6 },
   subtitle: { color: theme.colors.muted, marginBottom: 8 },
   label: { color: theme.colors.text, fontWeight: '600', marginBottom: 6, marginTop: 6 },
